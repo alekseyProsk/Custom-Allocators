@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include<stdint.h>
 
-static binder ListFree[228]; //для памяти, которая освобождена my_free
+static binder ListFree[228]; //Г¤Г«Гї ГЇГ Г¬ГїГІГЁ, ГЄГ®ГІГ®Г°Г Гї Г®Г±ГўГ®ГЎГ®Г¦Г¤ГҐГ­Г  my_free
 
 static uint16_t inUse = 0;
 
@@ -10,7 +10,7 @@ void* my_malloc(size_t size)
 {	
 	if (size >= HEAP_SIZE)
 	{
-		return NULL; // Если пытаемся выделить места больше, чем у нас в куче
+		return NULL; // Г…Г±Г«ГЁ ГЇГ»ГІГ ГҐГ¬Г±Гї ГўГ»Г¤ГҐГ«ГЁГІГј Г¬ГҐГ±ГІГ  ГЎГ®Г«ГјГёГҐ, Г·ГҐГ¬ Гі Г­Г Г± Гў ГЄГіГ·ГҐ
 	}
 
 	size += HEADER;
@@ -20,17 +20,17 @@ void* my_malloc(size_t size)
 	uint8_t* begin = bind->ptr;
 	uint8_t* userPtr = begin + HEADER;
 
-	*begin = size; // доступ в первому байту данных, куда ссылается bind
+	*begin = size; // Г¤Г®Г±ГІГіГЇ Гў ГЇГҐГ°ГўГ®Г¬Гі ГЎГ Г©ГІГі Г¤Г Г­Г­Г»Гµ, ГЄГіГ¤Г  Г±Г±Г»Г«Г ГҐГІГ±Гї bind
 
-	bind->ptr += size; //данные + хедер
-	bind->size -= size; // вычитаем  размер данных из кучи
+	bind->ptr += size; //Г¤Г Г­Г­Г»ГҐ + ГµГҐГ¤ГҐГ°
+	bind->size -= size; // ГўГ»Г·ГЁГІГ ГҐГ¬  Г°Г Г§Г¬ГҐГ° Г¤Г Г­Г­Г»Гµ ГЁГ§ ГЄГіГ·ГЁ
 
 	printLog();
 
 	return userPtr;
 }
 
-void printLog() // для отладки
+void printLog() // Г¤Г«Гї Г®ГІГ«Г Г¤ГЄГЁ
 {
 	for (unsigned i = 0; i < inUse; i++)
 	{
@@ -42,7 +42,6 @@ binder* newBinder(size_t size)
 {
 	if (ListFree[0].ptr == NULL && ListFree[0].size == 0)
 	{
-		
 		ListFree[0].ptr = heap;
 		ListFree[0].size = HEAP_SIZE;
 		inUse++;
@@ -53,7 +52,7 @@ binder* newBinder(size_t size)
 
 	for (unsigned i = 0; i < inUse; i++)
 	{
-		if (ListFree[i].size >= size && ListFree[i].size < fragment->size) //подбираем наиболее подходящий по размеру фрагмент
+		if (ListFree[i].size >= size && ListFree[i].size < fragment->size) //ГЇГ®Г¤ГЎГЁГ°Г ГҐГ¬ Г­Г ГЁГЎГ®Г«ГҐГҐ ГЇГ®Г¤ГµГ®Г¤ГїГ№ГЁГ© ГЇГ® Г°Г Г§Г¬ГҐГ°Гі ГґГ°Г ГЈГ¬ГҐГ­ГІ
 		{
 			fragment = &ListFree[i];
 		}
